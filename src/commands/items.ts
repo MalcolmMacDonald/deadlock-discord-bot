@@ -1,4 +1,5 @@
-﻿import {ArgsOf, Client, Discord, Guard, On} from "discordx";
+﻿import {browserExecutable} from "../chrome-installer.ts";
+import {ArgsOf, Client, Discord, Guard, On} from "discordx";
 import {NotBot} from "@discordx/utilities";
 import puppeteer from "puppeteer";
 import type {MessageReplyOptions} from "discord.js";
@@ -9,7 +10,7 @@ import {mostSimilarItem} from "../fetch-all-items";
 const itemNameDelimRegex = /\[\[(.*?)\]\]/g;
 const capitalizeLetterRegex = /(?<!')(?:\b|(?<=_))\w/g;
 
-const browser = await puppeteer.launch();
+const browser = await puppeteer.launch({executablePath: browserExecutable});
 
 enum WikiResponse {
     Error = "Error"
@@ -39,7 +40,6 @@ async function itemBoxScreenshot(fullItemName: string): Promise<ItemData | WikiR
 
     const itemURL = getItemURL(fullItemName);
     const prettyName = getPrettyItemName(fullItemName);
-    console.log(prettyName);
     const page = await browser.newPage();
     await page.goto(itemURL);
     const selector = '.infobox_item';
@@ -79,7 +79,6 @@ export class Items {
         const attemptedItems = await Promise.all(itemNames.map(itemBoxScreenshot));
         const successfulItems = attemptedItems.filter((item) => item !== WikiResponse.Error) as ItemData[];
 
-        //await initialReply.delete();
 
         if (successfulItems.length === 0) {
             await initialReply.edit({

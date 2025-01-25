@@ -1,4 +1,5 @@
-﻿import {IntentsBitField, Partials} from "discord.js";
+﻿import "./chrome-installer.ts"
+import {IntentsBitField, Partials} from "discord.js";
 import {Client} from "discordx";
 import dotenv from "dotenv";
 import {dirname, importx} from "@discordx/importer";
@@ -15,6 +16,7 @@ export class Main {
     }
 
     static async start(): Promise<void> {
+
 
         let envFile = await file(env as string);
         let config = dotenv.parse(await envFile.text());
