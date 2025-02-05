@@ -1,16 +1,13 @@
-﻿import {browserExecutable} from "../chrome-installer.ts";
-import {ArgsOf, Client, Discord, Guard, On} from "discordx";
+﻿import {ArgsOf, Client, Discord, Guard, On} from "discordx";
 import {NotBot} from "@discordx/utilities";
 import puppeteer from "puppeteer";
 import type {MessageReplyOptions} from "discord.js";
 import {MessageFlagsBitField} from "discord.js";
-import {mostSimilarItem} from "../fetch-all-items";
-
+import {mostSimilarItem} from "../util/cache-wiki-data";
 
 const itemNameDelimRegex = /\[\[(.*?)\]\]/g;
 const capitalizeLetterRegex = /(?<!')(?:\b|(?<=_))\w/g;
-
-const browser = await puppeteer.launch({executablePath: browserExecutable});
+const browser = await puppeteer.launch();
 
 enum WikiResponse {
     Error = "Error"

@@ -1,11 +1,10 @@
 ﻿import puppeteer from "puppeteer";
-import {browserExecutable} from "./chrome-installer.ts";
 
 const allItems = await getItemNames();
 
 async function getItemNames(): Promise<string[]> {
 
-    const browser = await puppeteer.launch({executablePath: browserExecutable});
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
     await page.goto("https://deadlocked.wiki/Template:Item_Navbox");

@@ -9,8 +9,8 @@
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "start": "bun ./src/cli.ts",
-    "build": "bun build ./src/cli.ts --compile ./src/commands/items.ts --outfile ./build/deadlock-discord-bot"
+    "start": "bun ./src/cli.ts ",
+    "build": "bun build  ./src/cli.ts --compile --outfile ./build/deadlock-discord-bot"
   },
   "dependencies": {
     "@discordx/importer": "^1.3.1",

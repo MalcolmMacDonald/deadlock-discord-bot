@@ -1,9 +1,9 @@
-﻿import "./chrome-installer.ts"
+﻿import "./util/chrome-installer.ts";
+import "./commands/";
 import {IntentsBitField, Partials} from "discord.js";
 import {Client} from "discordx";
 import dotenv from "dotenv";
 import {dirname, importx} from "@discordx/importer";
-import "./commands/items.ts";
 import env from "../.env" with {type: "file"};
 import {file} from "bun";
 
@@ -31,7 +31,7 @@ export class Main {
                 IntentsBitField.Flags.GuildMessages,
                 IntentsBitField.Flags.GuildMembers,
                 IntentsBitField.Flags.GuildMessageReactions,
-                IntentsBitField.Flags.MessageContent
+                IntentsBitField.Flags.MessageContent,
             ],
             partials: [Partials.Message, Partials.Channel, Partials.Reaction],
             silent: false,
@@ -39,9 +39,14 @@ export class Main {
 
         this.Client.on("ready", () => {
             console.log("Bot started...");
+            void this._client.initApplicationCommands();
+        });
+        this._client.on("interactionCreate", (interaction) => {
+            this._client.executeInteraction(interaction);
         });
 
-        await importx(`${dirname(import.meta.url)}/commands/**/*.{js,ts}`);
+
+        await importx(`${dirname(import.meta.url)}/commands/*.{js,ts}`);
 
         // let's start the bot
         if (!process.env.BOT_TOKEN) {
