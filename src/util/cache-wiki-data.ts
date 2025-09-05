@@ -1,14 +1,17 @@
-﻿import puppeteer from "puppeteer";
+﻿export const wikiURL = "https://deadlock.wiki"
+
+import puppeteer from "puppeteer";
 
 const allItems = await getItemNames();
+
 
 async function getItemNames(): Promise<string[]> {
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-
-    await page.goto("https://deadlocked.wiki/Template:Item_Navbox");
-
+    const url = `${wikiURL}/Template:Item_Navbox`;
+    await page.goto(url);
+    
     function parseItemName(itemPath) {
         return itemPath
             .replace('/', '')
@@ -24,13 +27,8 @@ async function getItemNames(): Promise<string[]> {
                 !link.getAttribute('class') &&
                 link.closest('table')
             )
-            .filter((link, index, self) =>
-                    index === self.findIndex((t) => (
-                        t.getAttribute('href') === link.getAttribute('href')
-                    ))
-            ).map(link => link.getAttribute('href'))
+            .map(link => link.getAttribute('href'))
     );
-
     await browser.close();
     return links.map((link) => parseItemName(link));
 }

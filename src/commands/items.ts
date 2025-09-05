@@ -3,7 +3,8 @@ import {NotBot} from "@discordx/utilities";
 import puppeteer from "puppeteer";
 import type {MessageReplyOptions} from "discord.js";
 import {MessageFlagsBitField} from "discord.js";
-import {mostSimilarItem} from "../util/cache-wiki-data";
+import {mostSimilarItem, wikiURL} from "../util/cache-wiki-data";
+
 
 const itemNameDelimRegex = /\[\[(.*?)\]\]/g;
 const capitalizeLetterRegex = /(?<!')(?:\b|(?<=_))\w/g;
@@ -25,7 +26,7 @@ function getItemURL(fullItemName: string): string {
         .replace('\'', '%27')
         .replace(capitalizeLetterRegex, (char) => char.toUpperCase())
         .replace(' ', '_');
-    return `https://deadlocked.wiki/${itemPath}`;
+    return `${wikiURL}/${itemPath}`;
 }
 
 function getPrettyItemName(fullItemName: string): string {
@@ -36,6 +37,7 @@ function getPrettyItemName(fullItemName: string): string {
 async function itemBoxScreenshot(fullItemName: string): Promise<ItemData | WikiResponse> {
 
     const itemURL = getItemURL(fullItemName);
+    console.log(`Fetching item: ${fullItemName} at ${itemURL}`);
     const prettyName = getPrettyItemName(fullItemName);
     const page = await browser.newPage();
     await page.goto(itemURL);
@@ -44,7 +46,8 @@ async function itemBoxScreenshot(fullItemName: string): Promise<ItemData | WikiR
     if (!infobox) {
         return WikiResponse.Error;
     }
-    const buffer = Buffer.from(await infobox.screenshot());
+    const screenshot = await infobox.screenshot() as Buffer;
+    const buffer = Buffer.from(screenshot);
     await page.close();
     return {buffer: buffer, pageURLName: fullItemName, itemURL: itemURL, prettyName: prettyName};
 }

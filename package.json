@@ -20,6 +20,7 @@
     "discordx": "^11.12.2",
     "dotenv": "^16.4.7",
     "puppeteer": "^24.1.1",
+    "puppeteer-core": "^24.19.0",
     "ts-node": "^10.9.2"
   }
 }

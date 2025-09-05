@@ -37,7 +37,7 @@ export class Main {
             silent: false,
         });
 
-        this.Client.on("ready", () => {
+        this.Client.on("clientReady", () => {
             console.log("Bot started...");
             void this._client.initApplicationCommands();
         });
